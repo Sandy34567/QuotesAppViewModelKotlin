@@ -7,9 +7,12 @@ import com.google.gson.Gson
 class MainViewModel(val context: Context):ViewModel() {
     private var quoteList:Array<Quote> = emptyArray()
     private var index =0
+
     init{
         quoteList= loadQuoteFromAssets()
     }
+
+
 
     private fun loadQuoteFromAssets(): Array<Quote> {
       val inputStream = context.assets.open("quotes.json")
@@ -21,7 +24,16 @@ class MainViewModel(val context: Context):ViewModel() {
         val gson =Gson()
         return gson.fromJson(json,Array<Quote>::class.java)
     }
+
     fun getQuote() =quoteList[index]
-    fun nextQuote() =quoteList[++index]
-    fun previousQuote() = quoteList[--index]
+    fun  nextQuote(): Quote {
+        if (index==quoteList.size-1)
+            index=-1
+        return quoteList[++index]
+    }
+    fun previousQuote(): Quote {
+        if (index==0)
+            index=quoteList.size-1
+        return quoteList[--index]
+    }
 }
